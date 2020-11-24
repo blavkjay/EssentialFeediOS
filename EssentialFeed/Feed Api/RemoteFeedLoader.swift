@@ -8,14 +8,6 @@
 
 import Foundation
 
-public enum HTTPClientResult {
-    case success(Data,HTTPURLResponse)
-    case failure(Error)
-}
-
-public protocol HTTPClient {
-    func get(from url: URL, completion: @escaping (HTTPClientResult) -> Void)
-}
 
 public final class RemoteFeedLoader {
    
@@ -80,7 +72,7 @@ private class FeedItemsMapper {
     
     static func map(_ data: Data, _ response: HTTPURLResponse) throws -> [FeedItem] {
         
-        if response.statusCode != OK_200 {
+        guard response.statusCode == OK_200 else {
             throw RemoteFeedLoader.Error.invalidData
         }
         
